@@ -1,0 +1,17 @@
+pandas
+numpy
+requests
+matplotlib
+plotly
+flipside
+memory-profiler
+pymongo
+web3
+psycopg2
+psycopg2-binary
+google-cloud-bigquery 
+google-auth
+pyarrow
+pandas-gbq
+python-dotenv
+PyYAML

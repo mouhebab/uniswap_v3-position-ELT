@@ -1,0 +1,6 @@
+UniswapV3Pool:
+  address: "0xe8f7c89c5efa061e340f2d2f206ec78fd8f7e124"
+  topics: ["0x7a53080ba414158be7ec69b987b5fb7d07dee101fe85488f0853ae16239d0bde","0x0c396cd989a39f4459b5fa1aed6a9a8dcdbc45908acfd67e028cd568da98982c"]
+NonfungiblePositionManager:
+  address: "0xc36442b4a4522e871399cd717abdd847ab11fe88"
+  topics: ["0x3067048beee31b25b2f1681f88dac838c8bba36af25bfb2b7cf7473a5847e35f","0x26f6a048ee9138f2c0ce266f322cb99228e8d619ae2bff30c67f8dcf9d2377b4"]

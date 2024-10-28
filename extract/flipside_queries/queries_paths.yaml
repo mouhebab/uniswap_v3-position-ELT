@@ -1,0 +1,3 @@
+positions_query: 'extract/flipside_queries/position_data_query.sql'
+pool_info_query: 'extract/flipside_queries/pool_info_query.sql'
+pool_search_query: 'extract/flipside_queries/pools_search_by_volume_query.sql'

@@ -1,0 +1,11 @@
+Mongo:
+  Mongo_Config:
+    host_url: "mongodb://localhost:27017/"
+    db_name: "uniswap_raw_position_data"
+  Mongo_Collections:
+    raw_position_Data_Collection: 
+      collection_name: "raw_position_data_collection"
+      primary_key: ["block_number", "tx_hash", "event_index"]
+    raw_poolinfo_Data_Collection: 
+      collection_name: "raw_poolinfo_data_collection"
+      primary_key: ["pool_address"]

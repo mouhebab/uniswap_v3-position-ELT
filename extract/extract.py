@@ -13,15 +13,17 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dotenv import load_dotenv
 from extract.extract_utils import *
 from extract.flipside_extract import extract_flipsidecrypto_data
+from load.mongodb_utils import bulk_upsert_mongodb , load_mongo_collection,get_mongo_config
 
 keys_path = get_path("secrets/.env.keys")
 pool_list_path = get_path('extract/input_params/pools.yaml')
 prevous_blocknumber_path = get_path("extract/input_params/blocknumber.db")
+db_params_path = get_path("config/db_params.yaml")
 
 flipside_api_key, etherscan_key, postgres_key, bigquery_credentials = get_keys(keys_path)
 
 pool_addresses_list = load_yaml_file(pool_list_path)['Pools']
-
+db_configs = load_yaml_file(db_params_path)
 
 def get_keys():
     flipside_api_key= os.getenv("flipside_key")
@@ -29,6 +31,11 @@ def get_keys():
     postgres_key = os.getenv("postgres_key")
     bigquery_credentials = os.getenv("bigquery_credentials")
     return flipside_api_key, etherscan_key, postgres_key, bigquery_credentials
+
+(mongo_host,mongo_dbname,
+    raw_position_Data_Collection,raw_position_Data_primary_key,
+        raw_poolinfo_Data_Collection,raw_poolinfo_Data_primary_key
+    ) = get_mongo_config(db_configs)
 
 
 queries_paths_path = r"extract/flipside_queries/queries_paths.yaml"
@@ -71,7 +78,9 @@ def fetch_poolsinfo(pools:List,query:str,api_key:str=flipside_api_key)->List:
     pool_info_data = extract_flipsidecrypto_data(query, params=params, api_key=api_key)
     return pool_info_data
 
+def load_to_mongo(data:List, collection_name:str, unique_keys:List, host:str = mongo_host,database_name:str = mongo_dbname) -> Any:
 
+    return bulk_upsert_mongodb(host, database_name, collection_name, data, unique_keys)
 
 def main():
 
@@ -87,6 +96,16 @@ def main():
 
     poolsinfo_results = fetch_poolsinfo(
         pool_addresses_list,pool_info_query)
+    
+    if positionData_results:
+        load_to_mongo(
+            positionData_results, raw_position_Data_Collection,
+            raw_position_Data_primary_key)
+        
+    if poolsinfo_results:
+        load_to_mongo(
+            poolsinfo_results, raw_poolinfo_Data_Collection,
+            raw_poolinfo_Data_primary_key)
 
 if __name__ == "__main__":
     main()

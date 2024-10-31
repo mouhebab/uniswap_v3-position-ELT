@@ -1,5 +1,6 @@
 import logging
 from extract.extract import main as extract_main
+from transform.transform import main as transform_main
 
 def setup_logging():
     logging.basicConfig(
@@ -17,7 +18,9 @@ def main():
         logging.info("Starting Extraction Step")
         extract_main()
         logging.info("Extraction Completed")
-
+        
+        logging.info("Starting Transformation + Load Step")
+        transform_main()
 
     except Exception as e:
         logging.exception(f"ETL Pipeline Failed: {e}")

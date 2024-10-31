@@ -5,6 +5,7 @@ from transform.transform_utils import *
 import pandas as pd
 from dotenv import load_dotenv
 from load.mongodb_utils import load_mongo_collection,get_mongo_config
+from load.bigquery_utils import load_to_bg,get_biqguery_config
 
 
 
@@ -21,6 +22,8 @@ contractsandtopics = load_yaml_file(contractsandtopics_path)
     raw_position_Data_Collection,raw_position_Data_primary_key,
         raw_poolinfo_Data_Collection,raw_poolinfo_Data__primary_key
     ) = get_mongo_config(db_configs)
+
+(bg_credentials,bg_table_id) =get_biqguery_config(db_configs,bigquery_credentials)
 
 
 (pool_contract_address,pool_contract_topics,
@@ -102,7 +105,7 @@ def main():
     pool_curated_data = get_pool_curated_data(positions_data_decoded=positions_data_decoded,pool_topic0=pool_contract_topics)
     nft_curated_data=get_nft_curated_data(positions_data_decoded=positions_data_decoded,nft_topic0=nft_contract_topics)
     position_curated_data = get_position_curated_data(pool_curated_data=pool_curated_data,nft_curated_data=nft_curated_data,pool_info_data_raw=pool_info_data_raw,columns_dtypes=columns_dtypes)
-    
-    return position_curated_data
+    bg_job_result = load_to_bg(position_curated_data,bg_credentials,bg_table_id)
+     
 if __name__ == "__main__":
     main()

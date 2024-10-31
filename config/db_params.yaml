@@ -9,3 +9,7 @@ Mongo:
     raw_poolinfo_Data_Collection: 
       collection_name: "raw_poolinfo_data_collection"
       primary_key: ["pool_address"]
+
+
+bigquery:
+  table_id: "db1-sendbox.uniswapV3.position_data"

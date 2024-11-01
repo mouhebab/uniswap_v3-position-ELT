@@ -1,0 +1,25 @@
+CREATE TABLE IF NOT EXISTS {table} (
+    PRIMARY KEY (blockNumber, transactionIndex, logIndex),
+    block_timestamp TIMESTAMP,
+    blockHash VARCHAR,
+    transactionHash VARCHAR,
+    blockNumber BIGINT,
+    transactionIndex INT,
+    logIndex INT,
+    pool_address VARCHAR,
+    owner VARCHAR,
+    sender VARCHAR,
+    liquidity BIGINT,
+    amount0 BIGINT,
+    amount1 BIGINT,
+    pool_event VARCHAR,
+    tickLower INT,
+    tickUpper INT,
+    NFT_event VARCHAR,
+    tokenid FLOAT,
+    token0 VARCHAR,
+    token1 VARCHAR,
+    fee INT,
+    tickspacing INT
+    
+);

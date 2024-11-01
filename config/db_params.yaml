@@ -13,3 +13,18 @@ Mongo:
 
 bigquery:
   table_id: "db1-sendbox.uniswapV3.position_data"
+
+postgres:
+  postgres_config:
+    host: "localhost"
+    port: "5432"
+    user: "postgres"
+    db_name: "uniswap_position_data"
+  postgres_table:
+    table_name: "curated_position_data"
+    columns_dtypes:
+      - - ['blockhash', 'transactionhash', 'pool_address', 'owner', 'sender', 'pool_event', 'nft_event', 'token0', 'token1']
+        - "string"
+      - - ['liquidity', 'amount0', 'amount1', 'ticklower', 'tickupper', 'fee', 'tickspacing', 'transactionindex', 'logindex', 'tokenId']
+        - "int"
+    time_column: "block_timestamp"

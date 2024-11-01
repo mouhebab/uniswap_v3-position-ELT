@@ -6,13 +6,14 @@ import pandas as pd
 from dotenv import load_dotenv
 from load.mongodb_utils import load_mongo_collection,get_mongo_config
 from load.bigquery_utils import load_to_bg,get_biqguery_config
+from load.postgres_utils import load_to_postgres,get_postgres_config
 
 
 
 
 keys_path = get_path("secrets/.env.keys")
 db_params_path = get_path("config/db_params.yaml")
-contractsandtopics_path = get_path("input_params/contractsandtopics.yaml")
+contractsandtopics_path = get_path("extract/input_params/contractsandtopics.yaml")
 
 flipside_api_key, etherscan_api_key, postgres_key, bigquery_credentials = get_keys(keys_path)
 db_configs = load_yaml_file(db_params_path)
@@ -25,6 +26,8 @@ contractsandtopics = load_yaml_file(contractsandtopics_path)
 
 (bg_credentials,bg_table_id) =get_biqguery_config(db_configs,bigquery_credentials)
 
+(postgres_key,pg_host,pg_port,
+    pg_user,pg_dbname,pg_table_name)= get_postgres_config(db_configs,postgres_key)
 
 (pool_contract_address,pool_contract_topics,
     nft_contract_address,nft_contract_topics) = get_contracts_params(contractsandtopics)
@@ -106,6 +109,6 @@ def main():
     nft_curated_data=get_nft_curated_data(positions_data_decoded=positions_data_decoded,nft_topic0=nft_contract_topics)
     position_curated_data = get_position_curated_data(pool_curated_data=pool_curated_data,nft_curated_data=nft_curated_data,pool_info_data_raw=pool_info_data_raw,columns_dtypes=columns_dtypes)
     bg_job_result = load_to_bg(position_curated_data,bg_credentials,bg_table_id)
-     
+    load_to_postgres(data=position_curated_data,table_name=pg_table_name,dbname=pg_dbname,postgres_password=postgres_key,user=pg_user,host=pg_host,port=pg_port)
 if __name__ == "__main__":
     main()
